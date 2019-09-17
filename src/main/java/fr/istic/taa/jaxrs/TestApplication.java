@@ -17,6 +17,11 @@
 package fr.istic.taa.jaxrs;
 
 import javax.ws.rs.core.Application;
+
+import fr.istic.taa.jaxrs.service.ListTacheEndpoint;
+import fr.istic.taa.jaxrs.service.UtilisateurEndpoint;
+import fr.istic.taa.jaxrs.service.TacheEndpoint;
+
 import java.util.HashSet;
 import java.util.Set;
 
@@ -27,10 +32,12 @@ public class TestApplication extends Application {
     public Set<Class<?>> getClasses() {
 
         final Set<Class<?>> clazzes = new HashSet<Class<?>>();
-
-        clazzes.add(StatusEndpoint.class);
-
+ 
+        clazzes.add(UtilisateurEndpoint.class);
+        clazzes.add(ListTacheEndpoint.class);
+        clazzes.add(TacheEndpoint.class);
         return clazzes;
     }
 
 }
+ 

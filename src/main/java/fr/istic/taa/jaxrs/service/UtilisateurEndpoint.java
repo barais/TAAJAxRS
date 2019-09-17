@@ -14,55 +14,64 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package fr.istic.taa.jaxrs;
+package fr.istic.taa.jaxrs.service;
 
+import java.util.List;
 import java.util.logging.Logger;
 
 import javax.ws.rs.Consumes;
 import javax.ws.rs.GET;
 import javax.ws.rs.POST;
 import javax.ws.rs.Path;
+import javax.ws.rs.PathParam;
 import javax.ws.rs.Produces;
 import javax.ws.rs.core.MediaType;
-import javax.ws.rs.core.Response;
 
-import fr.istic.taa.jaxrs.domain.Person;
+import fr.istic.taa.jaxrs.dao.DaoUtilisateur;
+import fr.istic.taa.jaxrs.domain.Utilisateur;
 
-@Path("/status")
-public class StatusEndpoint {
+@Path("/api")
+public class UtilisateurEndpoint {
+ 
+    private static final Logger logger = Logger.getLogger(UtilisateurEndpoint.class.getName());
 
-    private static final Logger logger = Logger.getLogger(StatusEndpoint.class.getName());
+    DaoUtilisateur daouser;
 
-    @GET
-    public Response getStatus() {
+    public UtilisateurEndpoint() {
 
-        return Response.status(Response.Status.OK).entity("JO").build();
+        this.daouser = new DaoUtilisateur();
+
     }
-    
+
     @GET
     @Path("/test")
     public String helloWorld() {
-
         return "hello";
     }
 
     @GET
-    @Path("/person")
+    @Path("/user/{userid}")
     @Produces(MediaType.APPLICATION_JSON)
-    public Person getPerson() {
-    	Person p = new Person();
-    	p.setName("test");
-    	p.setFirstName("t");
-        return p;
+    public Utilisateur getUser(@PathParam("userid") String id) {
+        Utilisateur u = this.daouser.findById(id);
+        return u;
+    }
+
+    @GET
+    @Path("/user/all")
+    @Produces(MediaType.APPLICATION_JSON)
+    public List<Utilisateur> getUtilisateur() {
+        return this.daouser.findAll();
     }
 
     @POST
-    @Path("/person")
+    @Path("/user")
+    @Produces(MediaType.APPLICATION_JSON)
     @Consumes(MediaType.APPLICATION_JSON)
-    public void addPerson(Person p) {
-    	System.err.println(p.getName());
+    public Utilisateur createUtilisateur(Utilisateur u) {
+
+        return this.daouser.save(u);
+
     }
-    
 
 }
-
